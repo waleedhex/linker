@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Opening...</title>
+
+<style>
+body {
+  margin: 0;
+  background: black;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-family: Arial;
+}
+</style>
+</head>
+
+<body>
+
+<div>جاري فتح الرابط...</div>
+
+<script>
+function isTikTok() {
+  return /tiktok|bytedance|musical.ly/i.test(navigator.userAgent);
+}
+
+const params = new URLSearchParams(window.location.search);
+const url = params.get("url");
+
+if (url) {
+
+  // 1️⃣ محاولة مباشرة
+  window.location.href = url;
+
+  // 2️⃣ محاولة ثانية
+  setTimeout(() => {
+    const a = document.createElement("a");
+    a.href = url;
+    a.target = "_blank";
+    document.body.appendChild(a);
+    a.click();
+  }, 300);
+
+  // 3️⃣ محاولة iframe
+  setTimeout(() => {
+    const iframe = document.createElement("iframe");
+    iframe.src = url;
+    iframe.style.display = "none";
+    document.body.appendChild(iframe);
+  }, 600);
+
+}
+</script>
+
+</body>
+</html>
