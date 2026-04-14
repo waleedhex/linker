@@ -1,0 +1,22 @@
+[
+  {
+    "title": "🎮 لوحة الحروف (مجاني)",
+    "url": "https://example1.com",
+    "image": "images/game1.webp"
+  },
+  {
+    "title": "✏️ لعبة شخبطة",
+    "url": "https://example2.com",
+    "image": "images/game2.png"
+  },
+  {
+    "title": "🔥 جميع الألعاب",
+    "url": "https://example3.com",
+    "image": "images/game3.gif"
+  },
+  {
+    "title": "📞 الدعم الفني",
+    "url": "https://example4.com",
+    "image": "images/support.jpg"
+  }
+]

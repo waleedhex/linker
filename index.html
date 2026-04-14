@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Loading...</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  text-align: center;
+}
+
+.container {
+  max-width: 420px;
+  margin: auto;
+  padding: 20px;
+}
+
+.logo {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  border-radius: 14px;
+  margin: 12px 0;
+  text-decoration: none;
+  font-weight: bold;
+  transition: 0.2s;
+}
+
+.btn img {
+  width: 45px;
+  height: 45px;
+  object-fit: cover;
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.warning {
+  display: none;
+  padding: 12px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <img id="logo" class="logo">
+  <h2 id="title"></h2>
+  <p id="desc"></p>
+
+  <div id="warning" class="warning"></div>
+
+  <div id="links"></div>
+</div>
+
+<script>
+// كشف TikTok
+function isTikTokInApp() {
+  const ua = navigator.userAgent.toLowerCase();
+  return ua.includes("tiktok") || ua.includes("bytedance") || ua.includes("musical.ly");
+}
+
+// فتح الرابط (نسخة محسنة)
+function openLink(url) {
+  if (isTikTokInApp()) {
+
+    // محاولة 1
+    window.location.href = url;
+
+    // محاولة 2
+    setTimeout(() => {
+      const a = document.createElement('a');
+      a.href = url;
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }, 200);
+
+    // محاولة 3
+    setTimeout(() => {
+      const iframe = document.createElement('iframe');
+      iframe.style.display = 'none';
+      iframe.src = url;
+      document.body.appendChild(iframe);
+    }, 400);
+
+  } else {
+    window.open(url, '_blank');
+  }
+}
+
+// تحميل البيانات
+async function load() {
+  const config = await fetch("config.json").then(r => r.json());
+  const links = await fetch("links.json").then(r => r.json());
+
+  document.title = config.title;
+  document.getElementById("title").innerText = config.title;
+  document.getElementById("desc").innerText = config.description;
+  document.getElementById("logo").src = config.logo;
+
+  document.body.style.background = config.theme.bg;
+  document.body.style.color = config.theme.text;
+
+  const warning = document.getElementById("warning");
+  warning.innerText = "فتح الرابط...";
+  warning.style.background = "#ef4444";
+
+  const container = document.getElementById("links");
+
+  links.forEach(link => {
+    const btn = document.createElement("div");
+    btn.className = "btn";
+    btn.style.background = config.theme.button;
+    btn.style.color = config.theme.buttonText;
+
+    btn.innerHTML = `
+      <img src="${link.image}" onerror="this.src='images/fallback.png'">
+      <span>${link.title}</span>
+    `;
+
+    btn.onclick = () => {
+      warning.style.display = "block";
+      openLink(link.url);
+    };
+
+    container.appendChild(btn);
+  });
+}
+
+load();
+</script>
+
+</body>
+</html>

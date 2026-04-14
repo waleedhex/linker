@@ -1,0 +1,13 @@
+{
+  "title": "Hex Games",
+  "description": "أفضل الألعاب الجماعية 🎮",
+  "logo": "images/logo.webp",
+
+  "theme": {
+    "bg": "#0f172a",
+    "card": "#1e293b",
+    "text": "#ffffff",
+    "button": "#22c55e",
+    "buttonText": "#000000"
+  }
+}
