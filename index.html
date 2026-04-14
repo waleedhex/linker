@@ -85,10 +85,12 @@ p {
 }
 
 .btn img {
-  width: 48px;
-  height: 48px;
-  object-fit: cover;
-  border-radius: 12px;
+  width: 50px;
+  height: 50px;
+  object-fit: contain; /* 🔥 مهم */
+  border-radius: 10px;
+  background: rgba(255,255,255,0.05);
+  padding: 4px;
 }
 
 .btn span {
@@ -126,43 +128,6 @@ p {
 </div>
 
 <script>
-// كشف TikTok
-function isTikTokInApp() {
-  const ua = navigator.userAgent.toLowerCase();
-  return ua.includes("tiktok") || ua.includes("bytedance") || ua.includes("musical.ly");
-}
-
-// فتح الرابط (محاولات متعددة)
-function openLink(url) {
-  if (isTikTokInApp()) {
-
-    // محاولة 1
-    window.location.href = url;
-
-    // محاولة 2
-    setTimeout(() => {
-      const a = document.createElement('a');
-      a.href = url;
-      a.target = '_blank';
-      a.rel = 'noopener noreferrer';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    }, 200);
-
-    // محاولة 3
-    setTimeout(() => {
-      const iframe = document.createElement('iframe');
-      iframe.style.display = 'none';
-      iframe.src = url;
-      document.body.appendChild(iframe);
-    }, 400);
-
-  } else {
-    window.open(url, '_blank');
-  }
-}
-
 // تأثير Ripple
 document.addEventListener("click", function(e) {
   const btn = e.target.closest(".btn");
@@ -206,18 +171,23 @@ async function load() {
     const container = document.getElementById("links");
 
     links.forEach(link => {
-      const btn = document.createElement("div");
+      const btn = document.createElement("a");
       btn.className = "btn";
 
+      // 🔥 النظام الذكي
+      btn.href = "redirect.html?url=" + encodeURIComponent(link.url);
+      btn.target = "_blank";
+      btn.rel = "noopener noreferrer";
+
       btn.innerHTML = `
-        <img src="${link.image}" onerror="this.src='images/fallback.png'">
+        <img src="${link.image}" loading="lazy"
+             onerror="this.onerror=null; this.src='images/fallback.png';">
         <span>${link.title}</span>
       `;
 
-      btn.onclick = () => {
+      btn.addEventListener("click", () => {
         document.getElementById("warning").style.display = "block";
-        openLink(link.url);
-      };
+      });
 
       container.appendChild(btn);
     });
